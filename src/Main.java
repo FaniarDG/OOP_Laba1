@@ -1,48 +1,37 @@
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
-public class Main
-{
-    public static void main(String[] args)
-    {
-        HashMap<String, Integer> wordCounts = new HashMap<>();
-        String word = "";
+public class Main {
 
-        try (FileReader reader = new FileReader("Lab1.txt"))
-        {
-            int c;
-            while ((c = reader.read()) != -1)
-            {
-                if (Character.isUpperCase((char) c))
-                {
-                    c = Character.toLowerCase((char) c);
-                }
-                if ((char) c >= 'а' && (char) c <= 'я')
-                {
-                    word += (char) c;
-                }
-                else
-                {
-                    if (!word.isEmpty())
-                    {
-                        wordCounts.put(word, wordCounts.getOrDefault(word, 0) + 1);
-                        word = "";
-                    }
-                }
-            }
-            if (!word.isEmpty())
-            {
-                wordCounts.put(word, wordCounts.getOrDefault(word, 0) + 1);
-            }
+    public static void main(String[] args) {
+
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Введите текст: ");
+        String text = scanner.nextLine();
+
+        wordsCount(text);
+
+        scanner.close();
+    }
+
+    public static void wordsCount(String text) {
+
+        String[] words = text.split(" ");
+
+        Map<String, Integer> wordCounts = new HashMap<>();
+
+        for (String word : words) {
+            word = word.toLowerCase();
+            word = word.replaceAll("[^a-zA-Zа-яА-Я0-9]", "");
+            wordCounts.put(word, wordCounts.getOrDefault(word, 0) + 1);
         }
-        catch (IOException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-        for (String key : wordCounts.keySet())
-        {
-            System.out.println(key + " - " + wordCounts.get(key));
+
+        for (Map.Entry<String, Integer> entry : wordCounts.entrySet()) {
+            System.out.println(entry.getKey() + " - " + entry.getValue());
         }
     }
 }
